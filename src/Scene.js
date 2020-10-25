@@ -9,7 +9,7 @@ class Scene {
     	this.pixelSampleIndex = 1;
     	this.targetCanvas = targetCanvas;
     	this.canvasSize = [200, 200];
-    	this.effect = new TestEffect();
+    	this.effect = new TestEffect(this);
 
     	this.targetCanvas.width = this.canvasSize[0];
     	this.targetCanvas.height = this.canvasSize[1];
@@ -18,30 +18,6 @@ class Scene {
 
     	this.initUniformEditor();
     	this.initPixelSampleEditor();
-
-    	var layers = 5;
-    	var y = 200 / layers / 2;
-    	var deltaY = 200 / layers;
-
-    	// 1 on the top
-    	this.addSpacedPixelSamples(y, 1);
-    	y += deltaY;
-
-    	// 6
-    	this.addSpacedPixelSamples(y, 6);
-    	y += deltaY;
-
-    	// 8
-    	this.addSpacedPixelSamples(y, 8);
-    	y += deltaY;
-
-    	// 8
-    	this.addSpacedPixelSamples(y, 8);
-    	y += deltaY;
-
-    	// 6
-    	this.addSpacedPixelSamples(y, 6);
-    	y += deltaY;
     }
 
     initUniformEditor() {
