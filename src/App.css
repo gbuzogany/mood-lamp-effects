@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+body {
+  background-color: #000;
+}
+
+#canvas {
+  width: 200px;
+  height: 200px;
+  /*background-color: #fff;*/
+  position: absolute;
+  top: calc(50% - 100px);
+}
