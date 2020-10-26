@@ -58,20 +58,6 @@ class TestEffect extends Effect {
     		sum += ((this.uniforms['fft'].value[i] - this.min) / ((this.max - this.min) + 1));
     	}
     	this.mean = sum/this.uniforms['fft'].value.length;
-    	// console.log(this.mean)
-
-    	// var band1Limit = 20;
-    	// var band2Limit = 40;
-
-    	// this.band1 = 0;
-    	// for (var i =0; i < band1Limit; i++) {
-    	// 	this.band1 += ((this.uniforms['fft'].value[i] - this.min) / ((this.max - this.min) + 1));
-    	// }
-
-    	// this.band2 = 0;
-    	// for (var i = band1Limit; i < band2Limit; i++) {
-    	// 	this.band2 += ((this.uniforms['fft'].value[i] - this.min) / ((this.max - this.min) + 1));
-    	// }
     }
 
     renderPixel(x, y) {
@@ -87,20 +73,6 @@ class TestEffect extends Effect {
     		val * 255
     	]
 
-    	// color = [
-    	// 	val.r,
-    	// 	val.g,
-    	// 	val.b
-    	// ]
-
-    	// var color = [
-    	// 	val.r,
-    	// 	val.g,
-    	// 	val.b
-    	// ]
-    	// var ts = this.uniforms['time'].value || 0;
-    	// var v = (Math.sin((x/200)*(Math.PI) + ts / 500) + 1) / 2;
-    	// return [v * 255, 0, 0];
     	return color;
     }
 }
