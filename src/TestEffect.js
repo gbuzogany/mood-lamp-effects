@@ -38,11 +38,70 @@ class TestEffect extends Effect {
     	y += deltaY;
     }
 
+    preprocess() {
+    	var min = 999999;
+    	var max = -999999;
+
+    	for (var i in this.uniforms['fft'].value) {
+    		if (this.uniforms['fft'].value[i] < min) {
+    			min = this.uniforms['fft'].value[i];
+    		}
+    		if (this.uniforms['fft'].value[i] > max) {
+    			max = this.uniforms['fft'].value[i];
+    		}
+    	}
+    	this.min = min;
+    	this.max = max;
+
+    	var sum = 0;
+    	for (var i in this.uniforms['fft'].value) {
+    		sum += ((this.uniforms['fft'].value[i] - this.min) / ((this.max - this.min) + 1));
+    	}
+    	this.mean = sum/this.uniforms['fft'].value.length;
+    	// console.log(this.mean)
+
+    	// var band1Limit = 20;
+    	// var band2Limit = 40;
+
+    	// this.band1 = 0;
+    	// for (var i =0; i < band1Limit; i++) {
+    	// 	this.band1 += ((this.uniforms['fft'].value[i] - this.min) / ((this.max - this.min) + 1));
+    	// }
+
+    	// this.band2 = 0;
+    	// for (var i = band1Limit; i < band2Limit; i++) {
+    	// 	this.band2 += ((this.uniforms['fft'].value[i] - this.min) / ((this.max - this.min) + 1));
+    	// }
+    }
+
     renderPixel(x, y) {
-    	// debugger;
-    	var ts = this.uniforms['time'].value || 0;
-    	var v = Math.sin(x/200*Math.PI) * ((ts % 1000) / 1000);
-    	return [v * 255, 0, 0];
+	    var color;
+    	var input = this.uniforms['fft'].value[x];
+	    var val = ((input - this.min) / ((this.max - this.min) + 1));
+	    // var t = (Math.sin(this.uniforms['time'].value/20000)+1)/2;
+
+	    // val = this.HSVtoRGB(1.0, 1, this.mean/0.5);
+    	color = [
+    		val * 255, //this.band1 / 10.0 * 255,
+    		val * 255, //this.band2 / 10.0 * 255,
+    		val * 255
+    	]
+
+    	// color = [
+    	// 	val.r,
+    	// 	val.g,
+    	// 	val.b
+    	// ]
+
+    	// var color = [
+    	// 	val.r,
+    	// 	val.g,
+    	// 	val.b
+    	// ]
+    	// var ts = this.uniforms['time'].value || 0;
+    	// var v = (Math.sin((x/200)*(Math.PI) + ts / 500) + 1) / 2;
+    	// return [v * 255, 0, 0];
+    	return color;
     }
 }
 

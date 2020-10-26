@@ -16,6 +16,8 @@ class Scene {
     	this.targetCanvas.style.width = this.canvasSize[0];
     	this.targetCanvas.style.height = this.canvasSize[1];
 
+    	this.currY = 0;
+
     	this.initUniformEditor();
     	this.initPixelSampleEditor();
     }
@@ -74,10 +76,13 @@ class Scene {
     }
 
     render() {
+    	this.effect.preprocess();
+    	// var currY = this.currY;
     	var ctx = this.targetCanvas.getContext('2d');
 	    ctx.fillStyle = "#000";
 	    ctx.fillRect(0, 0, this.canvasSize[0], this.canvasSize[1]);
     	var imageData = ctx.getImageData(0, 0, this.canvasSize[0], this.canvasSize[1]);
+    	// var imageData = ctx.getImageData(0, currY, this.canvasSize[0], 1);
     	var data = imageData.data;
 		for (var y=0; y<this.canvasSize[1]; y++) {
 	    	for (var x=0; x<this.canvasSize[0]; x++) {
@@ -90,6 +95,7 @@ class Scene {
     		}
     	}
     	ctx.putImageData(imageData, 0, 0);
+    	// ctx.putImageData(imageData, 0, currY, 0, 0, this.canvasSize[0], 1);
 
 		ctx.strokeStyle = "white";
     	for (var entry in this.pixelSamples) {
@@ -98,6 +104,11 @@ class Scene {
 			ctx.rect(sample.pos.x, sample.pos.y, 3, 3);
 			ctx.stroke();
     	}
+
+    	// this.currY++;
+    	// if (this.currY > this.canvasSize[1]) {
+    	// 	this.currY = 0;
+    	// }
     }
 }
 

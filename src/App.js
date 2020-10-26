@@ -15,7 +15,15 @@ class App extends React.Component {
         this.mediaUtils.initializeMicrophone();
         this.time = 0.0;
         this.uniforms = {};
+        this.cancelAllAnimationFrames();
         this.renderLoop();
+    }
+
+    cancelAllAnimationFrames() {
+        for (var i = 1; i < 99999; i++) {
+            window.clearInterval(i);
+            window.cancelAnimationFrame(i);
+        }
     }
 
     renderLoop = (timestamp) => {
