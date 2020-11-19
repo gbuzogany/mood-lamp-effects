@@ -67,13 +67,13 @@ class MediaUtils {
 	onAudioProcess = () => {
 		var array =  new Uint8Array(this.analyser.frequencyBinCount);
 		this.analyser.getByteFrequencyData(array);
-		var values = 0;
+		// var values = 0;
 
-		var length = array.length;
-		for (var i = 0; i < length; i++) {
-			values += array[i];
-		}
-		var average = values / length;
+		// var length = array.length;
+		// for (var i = 0; i < length; i++) {
+		// 	values += array[i];
+		// }
+		// var average = values / length;
 
 		// console.log(average);
 		this.fftOutput = array;

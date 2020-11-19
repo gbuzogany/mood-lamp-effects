@@ -1,6 +1,6 @@
-import Effect from './Effect'
 import PixelSample from './PixelSample'
 import TestEffect from './TestEffect'
+import WebSocketService from './WebSocketService'
 import * as dat from 'dat.gui';
 
 class Scene {
@@ -10,6 +10,7 @@ class Scene {
     	this.targetCanvas = targetCanvas;
     	this.canvasSize = [200, 200];
     	this.effect = new TestEffect(this);
+        this.wss = new WebSocketService();
 
     	this.targetCanvas.width = this.canvasSize[0];
     	this.targetCanvas.height = this.canvasSize[1];
@@ -23,22 +24,23 @@ class Scene {
     }
 
     initUniformEditor() {
-    	if (window.gui == undefined) {
+    	if (window.gui === undefined) {
 	    	window.gui = new dat.gui.GUI();
     	}
+        var entry;
     	this.gui = window.gui;
     	console.log(this.gui);
-    	for (var entry in this.gui.__folders) {
+    	for (entry in this.gui.__folders) {
     		this.gui.removeFolder(this.gui.__folders[entry]);
     	}
-    	for (var entry in this.gui.__controllers) {
+    	for (entry in this.gui.__controllers) {
     		this.gui.remove(this.gui.__controllers[entry]);
     	}
 
     	const effectFolder = this.gui.addFolder("Effect");
 
-    	for (var entry in this.effect.uniforms) {
-    		if (entry != 'time' && entry != 'fft') {
+    	for (entry in this.effect.uniforms) {
+    		if (entry !== 'time' && entry !== 'fft') {
     			var uniform = this.effect.uniforms[entry]
     			effectFolder.add(uniform, 'value', uniform.min, uniform.max, uniform.step).name(entry);
     		}
@@ -97,6 +99,8 @@ class Scene {
     	ctx.putImageData(imageData, 0, 0);
     	// ctx.putImageData(imageData, 0, currY, 0, 0, this.canvasSize[0], 1);
 
+        this.sendPixelColors();
+
 		ctx.strokeStyle = "white";
     	for (var entry in this.pixelSamples) {
     		var sample = this.pixelSamples[entry];
@@ -105,10 +109,36 @@ class Scene {
 			ctx.stroke();
     	}
 
+
     	// this.currY++;
     	// if (this.currY > this.canvasSize[1]) {
     	// 	this.currY = 0;
     	// }
+    }
+
+    sendPixelColors() {
+        var pixels = new Uint8Array(this.pixelSamples.length*4);
+        // [pixel id][r][g][b]
+
+        var i = 0;
+        for (var entry in this.pixelSamples) {
+            var sample = this.pixelSamples[entry];
+            var pixel = this.getPixelColor(sample.pos.x, sample.pos.y);
+            pixels[i*4] = i & 0xFF;
+            pixels.set(pixel.slice(0,3), i*4+1);
+            i++;
+            // ctx.rect(sample.pos.x, sample.pos.y, 3, 3);
+        }
+
+        this.wss.send(pixels);
+
+        // console.log(pixels);
+
+    }
+
+    getPixelColor(x, y) {
+        var ctx = this.targetCanvas.getContext('2d');
+        return ctx.getImageData(x, y, 1, 1).data;
     }
 }
 

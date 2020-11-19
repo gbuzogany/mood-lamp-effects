@@ -4,9 +4,6 @@ import MediaUtils from './MediaUtils'
 import Scene from './Scene'
 
 class App extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     componentDidMount = () => {
         this.canvas = document.getElementById('canvas');

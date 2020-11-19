@@ -17,9 +17,9 @@ class TestEffect extends Effect {
     	var deltaY = 200 / layers;
 
     	// 1 on the top
-    	this.scene.addSpacedPixelSamples(y, 1);
-    	y = 200 / layers / 2;
-    	y += deltaY;
+    	// this.scene.addSpacedPixelSamples(y, 1);
+    	// y = 200 / layers / 2;
+    	// y += deltaY;
 
     	// 6
     	this.scene.addSpacedPixelSamples(y, 6);
@@ -41,8 +41,9 @@ class TestEffect extends Effect {
     preprocess() {
     	var min = 999999;
     	var max = -999999;
+        var i;
 
-    	for (var i in this.uniforms['fft'].value) {
+    	for (i in this.uniforms['fft'].value) {
     		if (this.uniforms['fft'].value[i] < min) {
     			min = this.uniforms['fft'].value[i];
     		}
@@ -54,7 +55,7 @@ class TestEffect extends Effect {
     	this.max = max;
 
     	var sum = 0;
-    	for (var i in this.uniforms['fft'].value) {
+    	for (i in this.uniforms['fft'].value) {
     		sum += ((this.uniforms['fft'].value[i] - this.min) / ((this.max - this.min) + 1));
     	}
     	this.mean = sum/this.uniforms['fft'].value.length;
