@@ -39,30 +39,31 @@ class TestEffect extends Effect {
 
         //initial base colours
         this.colors = [
-            [253, 184, 19],
-            [253, 228, 132],
-            [178, 202, 237],
-            [117, 174, 220]
+            [250, 211, 128],
+            [246, 215, 176],
+            [155, 198, 146],
+            [46, 113, 8]
         ];
 
     }
 
 
     getBoundaries = (targetValue) => {
-        var temperatures;
+        var humidities;
         var colors;
 
-        if (targetValue < 20) {
-            temperatures = [0, 20];
+        if (targetValue < 45) {
+            humidities = [0, 45];
             colors = [this.colors[0], this.colors[1]];
-        } else if (targetValue < 22) {
-            temperatures = [20, 22];
+        } else if (targetValue < 60) {
+            humidities = [45, 60];
             colors = [this.colors[1], this.colors[2]];
         } else {
-            temperatures = [22, 50];
+            humidities = [60, 100];
             colors = [this.colors[2], this.colors[3]];
         }
-        return {'temperatures':temperatures, 'colors':colors};
+
+        return {'humidities':humidities, 'colors':colors};
     }
 
     getColorDelta(ratio, range, colorIndex) {
@@ -71,8 +72,8 @@ class TestEffect extends Effect {
         return colorDelta;
     }
 
-    computeDelta = (temperature, ranges) => {
-        var ratio = (temperature - ranges.temperatures[0]) / (ranges.temperatures[1] - ranges.temperatures[0]);
+    computeDelta = (humidity, ranges) => {
+        var ratio = (humidity - ranges.humidities[0]) / (ranges.humidities[1] - ranges.humidities[0]);
         var deltaR = this.getColorDelta(ratio, ranges.colors, 0);
         var deltaG = this.getColorDelta(ratio, ranges.colors, 1);
         var deltaB = this.getColorDelta(ratio, ranges.colors, 2);
@@ -81,8 +82,8 @@ class TestEffect extends Effect {
     }
 
 
-    getRGB = (temperature, ranges) => {
-        var deltaRGB = this.computeDelta(temperature, ranges);
+    getRGB = (humidity, ranges) => {
+        var deltaRGB = this.computeDelta(humidity, ranges);
         var r = ranges.colors[0][0] + deltaRGB[0];
         var g = ranges.colors[0][1] + deltaRGB[1];
         var b = ranges.colors[0][2] + deltaRGB[2];
@@ -92,15 +93,34 @@ class TestEffect extends Effect {
     }
 
     preprocess() {
-        var temp = this.uniforms['temperature'].value;
-        var ranges = this.getBoundaries(temp);
-        this.RGB = this.getRGB(temp, ranges);
-
+        var hum = this.uniforms['humidity'].value;
+        var ranges = this.getBoundaries(hum);
+        this.RGB = this.getRGB(hum, ranges);
+        this.pulsation = 2*(1 - (Math.sin(this.uniforms['time'].value/2500 % Math.PI/2))) - 0.5;
     }
 
 
     renderPixel(x, y) {
-	    var color = this.RGB;
+        var color = this.RGB;
+        var band = 0.3;
+
+        if (y > 200*(this.pulsation - band) && y < 200*this.pulsation) {
+            var alpha = 250*(Math.abs(this.pulsation - band - y/200));
+
+            color = [
+                alpha+this.RGB[0],
+                alpha+this.RGB[1],
+                alpha+this.RGB[2]
+            ]
+        } else if (y < 200*(this.pulsation+band) && y > 200*this.pulsation) {
+            var beta = 250*(Math.abs(this.pulsation + band - y/200));
+
+            color = [
+                beta+this.RGB[0],
+                beta+this.RGB[1],
+                beta+this.RGB[2]
+            ]
+        }
 
     	return color;
     }

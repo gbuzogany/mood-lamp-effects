@@ -93,9 +93,9 @@ class TestEffect extends Effect {
     }
 
     preprocess() {
-        var temp = this.uniforms['humidity'].value;
-        var ranges = this.getBoundaries(temp);
-        this.RGB = this.getRGB(temp, ranges);
+        var hum = this.uniforms['humidity'].value;
+        var ranges = this.getBoundaries(hum);
+        this.RGB = this.getRGB(hum, ranges);
 
     }
 

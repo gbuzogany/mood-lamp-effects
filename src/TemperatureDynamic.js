@@ -95,14 +95,33 @@ class TestEffect extends Effect {
         var temp = this.uniforms['temperature'].value;
         var ranges = this.getBoundaries(temp);
         this.RGB = this.getRGB(temp, ranges);
-
+        this.pulsation = 2*(1 - (Math.sin(this.uniforms['time'].value/1500 % Math.PI/2))) - 0.5;
     }
 
 
     renderPixel(x, y) {
-	    var color = this.RGB;
+        var color = this.RGB;
+        var band = 0.3;
 
-    	return color;
+        if (y > 200*(this.pulsation - band) && y < 200*this.pulsation) {
+            var alpha = 250*(Math.abs(this.pulsation - band - y/200));
+
+            color = [
+                alpha+this.RGB[0],
+                alpha+this.RGB[1],
+                alpha+this.RGB[2]
+            ]
+        } else if (y < 200*(this.pulsation+band) && y > 200*this.pulsation) {
+            var beta = 250*(Math.abs(this.pulsation + band - y/200));
+
+            color = [
+                beta+this.RGB[0],
+                beta+this.RGB[1],
+                beta+this.RGB[2]
+            ]
+        }
+
+        return color;
     }
 }
 
