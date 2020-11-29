@@ -107,7 +107,6 @@ class TestEffect extends Effect {
             // update currentIndex and ranges
             this.currentIndex = Math.floor((this.timeSpeed) % (this.colors.length));
             this.ranges = this.getBoundaries();
-            console.log(this.currentIndex, this.ranges.colors, this.RGB)
         } 
         else {
             this.RGB = this.colors[this.currentIndex];
@@ -117,12 +116,6 @@ class TestEffect extends Effect {
 
     renderPixel(x, y) {
         var color = this.RGB;
-
-        // var color = [
-        //    255, //this.band1 / 10.0 * 255,
-        //     255, //this.band2 / 10.0 * 255,
-        //      255
-        // ]
 
         return color;
     }
