@@ -79,32 +79,6 @@ class TestEffect extends Effect {
 
     }
 
-    getColorDelta(ratio, range, colorIndex) {
-        var colorRange = range[1][colorIndex] - range[0][colorIndex];
-        var colorDelta = ratio * colorRange;
-        return colorDelta;
-    }
-
-    computeDelta = (ranges) => {
-        var ratio = this.timeSpeed - Math.floor(this.timeSpeed);
-        var deltaR = this.getColorDelta(ratio, ranges, 0);
-        var deltaG = this.getColorDelta(ratio, ranges, 1);
-        var deltaB = this.getColorDelta(ratio, ranges, 2);
-        return [deltaR, deltaG, deltaB];
-    }
-
-
-    getRGB = () => {
-        var ranges = this.colorsRange;
-        var deltaRGB = this.computeDelta(ranges);
-        var r = Math.floor(ranges[0][0] + deltaRGB[0]);
-        var g = Math.floor(ranges[0][1] + deltaRGB[1]);
-        var b = Math.floor(ranges[0][2] + deltaRGB[2]);
-
-        return [r, g, b];
-
-    }
-
     preprocess() {
         var currentTime = this.uniforms['time'].value;
 

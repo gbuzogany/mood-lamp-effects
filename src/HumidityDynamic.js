@@ -16,11 +16,6 @@ class TestEffect extends Effect {
     	var y = 200 / (layers - 2) / 2;
     	var deltaY = 200 / layers;
 
-    	// 1 on the top
-    	// this.scene.addSpacedPixelSamples(y, 1);
-    	// y = 200 / layers / 2;
-    	// y += deltaY;
-
     	// 6
     	this.scene.addSpacedPixelSamples(y, 6);
     	y += deltaY;
@@ -48,7 +43,7 @@ class TestEffect extends Effect {
     }
 
 
-    getBoundaries = (targetValue) => {
+    getHumidBoundaries = (targetValue) => {
         var humidities;
         var colors;
 
@@ -66,13 +61,7 @@ class TestEffect extends Effect {
         return {'humidities':humidities, 'colors':colors};
     }
 
-    getColorDelta(ratio, range, colorIndex) {
-        var colorRange = range[1][colorIndex] - range[0][colorIndex];
-        var colorDelta = ratio * colorRange;
-        return colorDelta;
-    }
-
-    computeDelta = (humidity, ranges) => {
+    computeDeltaFromVal = (humidity, ranges) => {
         var ratio = (humidity - ranges.humidities[0]) / (ranges.humidities[1] - ranges.humidities[0]);
         var deltaR = this.getColorDelta(ratio, ranges.colors, 0);
         var deltaG = this.getColorDelta(ratio, ranges.colors, 1);
@@ -82,8 +71,8 @@ class TestEffect extends Effect {
     }
 
 
-    getRGB = (humidity, ranges) => {
-        var deltaRGB = this.computeDelta(humidity, ranges);
+    getRGBFromVal = (humidity, ranges) => {
+        var deltaRGB = this.computeDeltaFromVal(humidity, ranges);
         var r = ranges.colors[0][0] + deltaRGB[0];
         var g = ranges.colors[0][1] + deltaRGB[1];
         var b = ranges.colors[0][2] + deltaRGB[2];
@@ -94,8 +83,8 @@ class TestEffect extends Effect {
 
     preprocess() {
         var hum = this.uniforms['humidity'].value;
-        var ranges = this.getBoundaries(hum);
-        this.RGB = this.getRGB(hum, ranges);
+        var ranges = this.getHumidBoundaries(hum);
+        this.RGB = this.getRGBFromVal(hum, ranges);
         this.pulsation = 2*(1 - (Math.sin(this.uniforms['time'].value/2500 % Math.PI/2))) - 0.5;
     }
 

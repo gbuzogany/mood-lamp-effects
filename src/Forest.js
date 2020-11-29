@@ -49,12 +49,13 @@ class TestEffect extends Effect {
         ];
 
         this.currentIndex = 0;
+        this.colorsRange = [this.colors[0], this.colors[1]];
         this.modulo = 1000;
         this.initialTime = this.uniforms['time'].value;
         //fixed speed for this effect
         this.speed = 4;
         this.timeSpeed = 0.0;
-        this.ranges = this.getBoundaries();
+
     }
 
     getBoundaries = () => {
@@ -66,34 +67,9 @@ class TestEffect extends Effect {
             colors = [this.colors[this.currentIndex - 1], this.colors[this.currentIndex]];
         }
 
-        return {'colors':colors};
+        this.colorsRange = colors;
     }
 
-    getColorDelta(ratio, range, colorIndex) {
-        var colorRange = range[1][colorIndex] - range[0][colorIndex];
-        var colorDelta = ratio * colorRange;
-        return colorDelta;
-    }
-
-    computeDelta = (ranges) => {
-        var ratio = this.timeSpeed - Math.floor(this.timeSpeed);
-        var deltaR = this.getColorDelta(ratio, ranges.colors, 0);
-        var deltaG = this.getColorDelta(ratio, ranges.colors, 1);
-        var deltaB = this.getColorDelta(ratio, ranges.colors, 2);
-        return [deltaR, deltaG, deltaB];
-    }
-
-
-    getRGB = () => {
-        var ranges = this.ranges;
-        var deltaRGB = this.computeDelta(ranges);
-        var r = Math.floor(ranges.colors[0][0] + deltaRGB[0]);
-        var g = Math.floor(ranges.colors[0][1] + deltaRGB[1]);
-        var b = Math.floor(ranges.colors[0][2] + deltaRGB[2]);
-
-        return [r, g, b];
-
-    }
 
     preprocess() {
         var currentTime = this.uniforms['time'].value;
@@ -109,7 +85,7 @@ class TestEffect extends Effect {
 
             // update currentIndex and ranges
             this.currentIndex = Math.floor((this.timeSpeed) % (this.colors.length));
-            this.ranges = this.getBoundaries();
+            this.getBoundaries();
         } 
         else {
             this.RGB = this.colors[this.currentIndex];

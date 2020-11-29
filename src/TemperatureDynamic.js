@@ -16,11 +16,6 @@ class TestEffect extends Effect {
     	var y = 200 / (layers - 2) / 2;
     	var deltaY = 200 / layers;
 
-    	// 1 on the top
-    	// this.scene.addSpacedPixelSamples(y, 1);
-    	// y = 200 / layers / 2;
-    	// y += deltaY;
-
     	// 6
     	this.scene.addSpacedPixelSamples(y, 6);
     	y += deltaY;
@@ -48,7 +43,7 @@ class TestEffect extends Effect {
     }
 
 
-    getBoundaries = (targetValue) => {
+    getTempBoundaries = (targetValue) => {
         var temperatures;
         var colors;
 
@@ -65,13 +60,7 @@ class TestEffect extends Effect {
         return {'temperatures':temperatures, 'colors':colors};
     }
 
-    getColorDelta(ratio, range, colorIndex) {
-        var colorRange = range[1][colorIndex] - range[0][colorIndex];
-        var colorDelta = ratio * colorRange;
-        return colorDelta;
-    }
-
-    computeDelta = (temperature, ranges) => {
+    computeDeltaFromVal = (temperature, ranges) => {
         var ratio = (temperature - ranges.temperatures[0]) / (ranges.temperatures[1] - ranges.temperatures[0]);
         var deltaR = this.getColorDelta(ratio, ranges.colors, 0);
         var deltaG = this.getColorDelta(ratio, ranges.colors, 1);
@@ -81,8 +70,8 @@ class TestEffect extends Effect {
     }
 
 
-    getRGB = (temperature, ranges) => {
-        var deltaRGB = this.computeDelta(temperature, ranges);
+    getRGBFromVal = (temperature, ranges) => {
+        var deltaRGB = this.computeDeltaFromVal(temperature, ranges);
         var r = ranges.colors[0][0] + deltaRGB[0];
         var g = ranges.colors[0][1] + deltaRGB[1];
         var b = ranges.colors[0][2] + deltaRGB[2];
@@ -93,8 +82,8 @@ class TestEffect extends Effect {
 
     preprocess() {
         var temp = this.uniforms['temperature'].value;
-        var ranges = this.getBoundaries(temp);
-        this.RGB = this.getRGB(temp, ranges);
+        var ranges = this.getTempBoundaries(temp);
+        this.RGB = this.getRGBFromVal(temp, ranges);
         this.pulsation = 2*(1 - (Math.sin(this.uniforms['time'].value/1500 % Math.PI/2))) - 0.5;
     }
 
