@@ -59,6 +59,8 @@ class TestEffect extends Effect {
         this.modulo = 1000;
         this.initialTime = this.uniforms['time'].value;
         this.timeSpeed = 0.0;
+        // fixed speed for this effect
+        this.speed = 20;
     }
 
     getBoundaries = () => {
@@ -115,8 +117,7 @@ class TestEffect extends Effect {
             // update time counter
             var deltaTime = currentTime - this.initialTime;
             this.initialTime = currentTime;
-            var speed = this.uniforms['speed'].value;
-            this.timeSpeed += deltaTime * speed/50000;
+            this.timeSpeed += deltaTime * this.speed/50000;
 
             // update currentIndex and ranges
             this.currentPulse = Math.floor((this.timeSpeed) % (this.colors.length));
