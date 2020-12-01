@@ -75,7 +75,7 @@ class TestEffect extends Effect {
 
         if (currentTime !== undefined) {
             // compute color for this frame
-            this.RGB = this.getRGB();
+            this.RGB = this.getRGB(this.colorsRange);
 
             // update time counter
             var deltaTime = currentTime - this.initialTime;

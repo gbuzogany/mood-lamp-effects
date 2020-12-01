@@ -121,10 +121,11 @@ class TestEffect extends Effect {
 
 
             // compute the two RGB colors
+            var ratio = this.timeSpeed - Math.floor(this.timeSpeed);
             this.colorsRange = this.colorsRangeTop;
-            this.RGBTop = this.getRGB();
+            this.RGBTop = this.getRGB(ratio, this.colorsRangeTop);
             this.colorsRange = this.colorsRangeBottom;
-            this.RGBBottom = this.getRGB();
+            this.RGBBottom = this.getRGB(ratio, this.colorsRangeBottom);
         }  else {
             this.RGBTop = this.colorsRangeTop[this.currentPulse];
             this.RGBBottom = this.colorsRangeBottom[this.currentPulse];

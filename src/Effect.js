@@ -25,22 +25,20 @@ class Effect {
         return colorDelta;
     }
 
-    computeDelta = (ranges) => {
-        var ratio = this.timeSpeed - Math.floor(this.timeSpeed);
-        var deltaR = this.getColorDelta(ratio, ranges, 0);
-        var deltaG = this.getColorDelta(ratio, ranges, 1);
-        var deltaB = this.getColorDelta(ratio, ranges, 2);
+    computeDelta = (ratio, colorRange) => {
+        // var ratio = this.timeSpeed - Math.floor(this.timeSpeed);
+        var deltaR = this.getColorDelta(ratio, colorRange, 0);
+        var deltaG = this.getColorDelta(ratio, colorRange, 1);
+        var deltaB = this.getColorDelta(ratio, colorRange, 2);
         return [deltaR, deltaG, deltaB];
     }
 
 
-    getRGB = () => {
-        var ranges = this.colorsRange;
-        var deltaRGB = this.computeDelta(ranges);
-        var r = Math.floor(ranges[0][0] + deltaRGB[0]);
-        var g = Math.floor(ranges[0][1] + deltaRGB[1]);
-        var b = Math.floor(ranges[0][2] + deltaRGB[2]);
-
+    getRGB = (ratio, colorRange) => {
+        var deltaRGB = this.computeDelta(ratio, colorRange);
+        var r = Math.floor(colorRange[0][0] + deltaRGB[0]);
+        var g = Math.floor(colorRange[0][1] + deltaRGB[1]);
+        var b = Math.floor(colorRange[0][2] + deltaRGB[2]);
         return [r, g, b];
 
     }

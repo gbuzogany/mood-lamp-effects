@@ -47,11 +47,12 @@ class TestEffect extends Effect {
         ];
 
         this.currentIndex = 0;
-        this.colorsRange = [this.colors[0], this.colors[1]];
         this.modulo = 1000;
         this.initialTime = this.uniforms['time'].value;
         this.timeSpeed = 0.0;
-        this.ranges = this.getBoundaries();
+        
+        this.colorsRange = [];
+        this.getBoundaries();
         // fixed speed for this effect
         this.speed = 9;
     }
@@ -75,7 +76,8 @@ class TestEffect extends Effect {
 
         if (currentTime !== undefined) {
             // compute color for this frame
-            this.RGB = this.getRGB();
+            var ratio = this.timeSpeed - Math.floor(this.timeSpeed);
+            this.RGB = this.getRGB(ratio, this.colorsRange);
 
             // update time counter
             var deltaTime = currentTime - this.initialTime;

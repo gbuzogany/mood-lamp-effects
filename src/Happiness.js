@@ -70,7 +70,7 @@ class TestEffect extends Effect {
                 }
             }
 
-            this.colorsRange= [this.colors[this.colorArrayMax], this.colors[random]];
+            this.colorsRange = [this.colors[this.colorArrayMax], this.colors[random]];
             this.colorArrayMax = random;
             this.previousPulse = this.currentPulse;
         };
@@ -82,7 +82,8 @@ class TestEffect extends Effect {
 
         if (currentTime !== undefined) {
             // compute color for this frame
-            this.RGB = this.getRGB();
+            var ratio = this.timeSpeed - Math.floor(this.timeSpeed);
+            this.RGB = this.getRGB(ratio, this.colorsRange);
 
             // update time counter
             var deltaTime = currentTime - this.initialTime;
