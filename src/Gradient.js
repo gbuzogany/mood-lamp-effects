@@ -45,23 +45,9 @@ class TestEffect extends Effect {
         this.modulo = 1000;
         this.initialTime = this.uniforms['time'].value;
         this.timeSpeed = 0.0;
-        this.colorsRange = [];
-        this.getBoundaries();
-    }
-
-    getBoundaries = () => {
-        var colors;
-
-        if (this.currentIndex === 0) {
-            colors = [this.colors[this.colors.length - 1], this.colors[this.currentIndex]];
-        } else {
-            colors = [this.colors[this.currentIndex - 1], this.colors[this.currentIndex]];
-        }
-
-        this.colorsRange = colors;
+        this.colorsRange = [this.colors[0], this.colors[1]];
 
     }
-
 
     preprocess() {
         var currentTime = this.uniforms['time'].value;
@@ -78,7 +64,8 @@ class TestEffect extends Effect {
 
             // update currentIndex and ranges
             this.currentIndex = Math.floor((this.timeSpeed) % (this.colors.length));
-            this.getBoundaries();
+            var colorNextIndex = (this.currentIndex + 1) % this.colors.length;
+            this.colorsRange = [this.colors[this.currentIndex], this.colors[colorNextIndex]];
         } 
         else {
             this.RGB = this.colors[this.currentIndex];
