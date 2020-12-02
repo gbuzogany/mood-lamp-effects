@@ -45,10 +45,6 @@ class TestEffect extends Effect {
         this.colors = this.colorsInit;
         this.colorArrayMax = 1;
 
-        this.deltaX = 0;
-        this.rotateIndex = 0;
-        this.interval = 200 / this.colors.length;
-
         this.modulo = 1000;
         this.initialTime = this.uniforms['time'].value;
         this.timeSpeed = 0.0;
@@ -66,12 +62,6 @@ class TestEffect extends Effect {
     }
 
     preprocess() {
-
-        if (this.deltaX === 199) {
-            this.deltaX = 0;
-        } else {
-            this.deltaX += 1;
-        }
 
         var currentTime = this.uniforms['time'].value;
 
