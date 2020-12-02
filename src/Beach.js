@@ -48,9 +48,6 @@ class TestEffect extends Effect {
             [71, 183, 203],
             [101, 205, 213]
         ];
-        this.colorArrayMaxBottom = 1;
-        this.colorsRangeBottom = [this.colorsBottom[0], this.colorsBottom[1]];
-        this.RGBBottom = this.colorsBottom[0];
 
         this.currentPulse = 0;
         this.previousPulse = 0;
@@ -61,48 +58,39 @@ class TestEffect extends Effect {
     }
 
 
-    getRandomIndex(target) {
-
-        var colorsArray;
-        var colorArrayMax;
-
-        if (target === 'top') {
-            colorsArray = this.colorsTop;
-            colorArrayMax = this.colorArrayMaxTop;
-        } else {
-            colorsArray = this.colorsBottom;
-            colorArrayMax = this.colorArrayMaxBottom;
-        }
-        
-        var random = Math.floor(Math.random() * colorsArray.length);
-        if (random === this.colorArrayMax) {
-            if (random === this.colors.length - 1) {
+    getRandomIndex() {
+        var random = Math.floor(Math.random() * this.colorsTop.length);
+        if (random === this.colorArrayMaxTop) {
+            if (random === this.colorsTop.length - 1) {
                 random = 0;
             } else {
                 random += 1;
             }
         }
 
-        if (target === 'top') {
-            this.colorsRangeTop = [colorsArray[colorArrayMax], colorsArray[random]];
-            this.colorArrayMaxTop = random;
-        } else {
-            this.colorsRangeBottom = [colorsArray[colorArrayMax], colorsArray[random]];
-            this.colorArrayMaxBottom = random;
-        }
-
+        this.colorsRangeTop = [this.colorsTop[this.colorArrayMaxTop], this.colorsTop[random]];
+        this.colorArrayMaxTop = random;
     }
 
 
     getBoundaries = () => {
-
         if (this.currentPulse !== this.previousPulse) {
-            this.getRandomIndex('top');
-            this.getRandomIndex('bottom');
+            this.getRandomIndex();
             this.previousPulse = this.currentPulse;
         };
 
     }
+
+    getSlidingRatioAndRange = (colors, y, incr) => {
+        var output = ((colors.length / 200) * y + incr) % colors.length;
+        var colorMinIndex = Math.floor(output);
+        var colorMaxIndex = (colorMinIndex + 1) % colors.length;
+        var colorsRange = [colors[colorMinIndex], colors[colorMaxIndex]];
+        var ratio = output - colorMinIndex;
+
+        return [ratio, colorsRange];
+    }
+
 
     preprocess() {
         var currentTime = this.uniforms['time'].value;
@@ -124,11 +112,8 @@ class TestEffect extends Effect {
             var ratio = this.timeSpeed - Math.floor(this.timeSpeed);
             this.colorsRange = this.colorsRangeTop;
             this.RGBTop = this.getRGB(ratio, this.colorsRangeTop);
-            this.colorsRange = this.colorsRangeBottom;
-            this.RGBBottom = this.getRGB(ratio, this.colorsRangeBottom);
         }  else {
             this.RGBTop = this.colorsRangeTop[this.currentPulse];
-            this.RGBBottom = this.colorsRangeBottom[this.currentPulse];
         }
 
     }
@@ -139,7 +124,9 @@ class TestEffect extends Effect {
         var color;
 
         if (y > 100) {
-            color = this.RGBBottom;
+            // color = this.RGBBottom;
+            var [ratio, colorsRange] = this.getSlidingRatioAndRange(this.colorsBottom, y + 30*Math.sin(x/20 + this.timeSpeed*20), this.timeSpeed);
+            color = this.getRGB(ratio, colorsRange);
         } else {
             color = this.RGBTop;
         }
