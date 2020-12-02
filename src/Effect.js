@@ -45,6 +45,7 @@ class Effect {
     
     HSVtoRGB(h, s, v) {
 	    var r, g, b, i, f, p, q, t;
+        h = h % 1;
 	    if (s === undefined && v === undefined) {
 	        s = h.s;
 	        v = h.v;
