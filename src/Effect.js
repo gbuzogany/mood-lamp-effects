@@ -42,10 +42,50 @@ class Effect {
         return [r, g, b];
 
     }
-    
+
+    clamp(num, min, max) {
+        return Math.min(Math.max(num, min), max);
+    }
+
+    RGBtoHSV(rgb) {
+        var r = rgb[0] / 255;
+        var g = rgb[1] / 255;
+        var b = rgb[2] / 255;
+        var max = Math.max(r, g, b);
+        var min = Math.min(r, g, b);
+        var delta = max - min;
+        var hue = 0;
+        var value = max;
+        var saturation = max === 0 ? 0 : delta / max;
+
+        switch (max) {
+        case min:
+            hue = 0; // achromatic
+            break;
+        case r:
+            hue = (g - b) / delta + (g < b ? 6 : 0);
+            break;
+        case g:
+            hue = (b - r) / delta + 2;
+            break;
+        case b:
+            hue = (r - g) / delta + 4;
+            break;
+        default:
+            break;
+        }
+
+        return {
+            h: (hue * 60 % 360)/360,
+            s: this.clamp(saturation * 100, 0, 100),
+            v: this.clamp(value * 100, 0, 100)
+        };
+
+    }
+
     HSVtoRGB(h, s, v) {
 	    var r, g, b, i, f, p, q, t;
-        h = h % 1;
+        // h = h % 1;
 	    if (s === undefined && v === undefined) {
 	        s = h.s;
 	        v = h.v;
