@@ -104,7 +104,7 @@ class TestEffect extends Effect {
         }
     }
 
-    getBlinkingColor = (x, y) => {
+    getBlinkingColor = () => {
         var ratio = this.timeSpeed - Math.floor(this.timeSpeed);
         var colorsRange;
         var color;
@@ -159,7 +159,7 @@ class TestEffect extends Effect {
 
         var c = this.positions.indexOf(pixel);
         if (c !== -1){
-            color = this.getBlinkingColor(x, y);
+            color = this.getBlinkingColor();
         }
 
 
