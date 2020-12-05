@@ -118,12 +118,11 @@ class TestEffect extends Effect {
             this.timeSpeed += deltaTime * speed/50000;
 
             // update currentPulse and ranges
-            this.currentPulse = Math.floor((this.timeSpeed) % this.colorsRangeSun.length);
+            this.currentPulse = Math.floor((this.timeSpeed) % this.colorsSun.length);
             this.getBoundaries();
 
             // compute the two RGB colors
             var ratio = this.timeSpeed - Math.floor(this.timeSpeed);
-            this.colorsRangeSun = this.colorsRangeSun;
             this.RGBTop = this.getRGB(ratio, this.colorsSun);
         }  else {
             this.RGBSun = this.colorsRangeSun[this.currentPulse];
