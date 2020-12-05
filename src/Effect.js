@@ -20,9 +20,14 @@ class Effect {
     }
 
     getColorDelta(ratio, range, colorIndex) {
-        var colorRange = range[1][colorIndex] - range[0][colorIndex];
-        var colorDelta = this.smoothStep(ratio) * colorRange;
-        return colorDelta;   
+        try {
+            var colorRange = range[1][colorIndex] - range[0][colorIndex];
+            var colorDelta = this.smoothStep(ratio) * colorRange;
+            return colorDelta;   
+
+        } catch (error) {
+            console.log(range)
+        }
 
     }
 
