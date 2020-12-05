@@ -111,7 +111,7 @@ class TestEffect extends Effect {
 
     getSlidingRatioAndRange = (colors, y, incr) => {
         var output = ((colors.length / 200) * y + incr) % colors.length;
-        var colorMinIndex = Math.floor(output);
+        var colorMinIndex = Math.abs(Math.floor(output));
         var colorMaxIndex = (colorMinIndex + 1) % colors.length;
         var colorsRange = [colors[colorMinIndex], colors[colorMaxIndex]];
         var ratio = output - colorMinIndex;
@@ -121,7 +121,7 @@ class TestEffect extends Effect {
 
     preprocess() {
         var currentTime = this.uniforms['time'].value;
-
+        // console.log([this.RGB, this.colorsRange[1]])
         if (currentTime === undefined) {
             currentTime = 0;
         } else {
@@ -146,9 +146,8 @@ class TestEffect extends Effect {
             y + 30*Math.sin(x/100 + this.timeSpeed*this.animationSpeed), 
             this.timeSpeed
         );
+
         var color = this.getRGB(ratio, colorsRange);
-
-
 
         return color;
     }
