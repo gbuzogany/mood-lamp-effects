@@ -44,11 +44,11 @@ class TestEffect extends Effect {
     }
 
     getHue = (y, incr) => {
-        var hue = Math.abs(y - incr)/100 % 1;
+        var hue = Math.abs((200-y) - incr)/100 % 1;
         hue = this.smoothStep(hue);
         if (hue >= 0.5) {
             hue = 1 - hue;
-        } 
+        }
 
         hue = this.minHue + hue * (this.maxHue - this.minHue);
 
@@ -61,7 +61,7 @@ class TestEffect extends Effect {
 
         if (currentTime === undefined) {
             currentTime = 0;
-        } 
+        }
 
         // update time counter
         var deltaTime = currentTime - this.initialTime;
